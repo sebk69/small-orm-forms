@@ -1,0 +1,17 @@
+{
+  "name": "sebk/small-orm-forms",
+  "licence": "GPL-3.0-only",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Sébastien Kus",
+      "email": "seb@small-iceberg.dev"
+    }
+  ],
+  "require": {
+    "../small-orm-core": "1.*"
+  },
+  "autoload": {
+    "psr-4": { "Sebk\\SmallOrmForms\\": "src"}
+  }
+}
