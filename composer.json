@@ -9,7 +9,6 @@
     }
   ],
   "require": {
-    "../small-orm-core": "1.*"
   },
   "autoload": {
     "psr-4": { "Sebk\\SmallOrmForms\\": "src"}
