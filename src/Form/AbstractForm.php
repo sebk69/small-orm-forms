@@ -26,12 +26,10 @@ abstract class AbstractForm
      * @return $this
      * @throws FieldException
      */
-    public function addField($key, $label = null, $value = null, TypeInterface $type = null, string $mandatory = null)
+    public function addField($key, $label = null, $value = null, string $typeString = null, string $mandatory = null)
     {
         // string by default
-        if ($type == null) {
-            $type = Type::get("string");
-        }
+        $type = Type::get($typeString);
 
         // Add field
         if ($mandatory === null) {
@@ -82,7 +80,7 @@ abstract class AbstractForm
      */
     public function validate()
     {
--       $messages = new MessageCollection();
+        $messages = new MessageCollection;
         $messageClass = $this->messageClass;
 
         foreach ($this->fields as $key => $field) {
