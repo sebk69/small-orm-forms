@@ -2,15 +2,15 @@
 
 namespace Sebk\SmallOrmForms\Type;
 
-class IntType implements TypeInterface
+class FloatType implements TypeInterface
 {
-    const TYPE_INT = "int";
+    const TYPE_FLOAT = "float";
 
     use TypeTrait;
 
-    public function __construct()
+    public function __contruct()
     {
-        $this->setType(self::TYPE_INT);
+        $this->setType(self::TYPE_FLOAT);
     }
 
     /**
@@ -20,8 +20,7 @@ class IntType implements TypeInterface
      */
     public function validate($value)
     {
-        if (!ctype_digit((string)$value) && $value !== null) {
-            dump($value);
+        if (!filter_var($value, FILTER_VALIDATE_FLOAT)) {
             return false;
         }
 
@@ -35,6 +34,6 @@ class IntType implements TypeInterface
      */
     public function reformat($value)
     {
-        return (int)$value;
+        return (float)$value;
     }
 }

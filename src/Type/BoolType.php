@@ -2,15 +2,15 @@
 
 namespace Sebk\SmallOrmForms\Type;
 
-class IntType implements TypeInterface
+class BoolType implements TypeInterface
 {
-    const TYPE_INT = "int";
+    const TYPE_BOOL = "bool";
 
     use TypeTrait;
 
-    public function __construct()
+    public function __contruct()
     {
-        $this->setType(self::TYPE_INT);
+        $this->setType(self::TYPE_BOOL);
     }
 
     /**
@@ -20,8 +20,7 @@ class IntType implements TypeInterface
      */
     public function validate($value)
     {
-        if (!ctype_digit((string)$value) && $value !== null) {
-            dump($value);
+        if (!is_bool($value)) {
             return false;
         }
 
@@ -35,6 +34,6 @@ class IntType implements TypeInterface
      */
     public function reformat($value)
     {
-        return (int)$value;
+        return (bool)$value;
     }
 }

@@ -5,13 +5,16 @@ namespace Sebk\SmallOrmForms\Message;
 class Message
 {
     const FIELD_MANDATORY_ERROR = "FIELD_MANDATORY_ERROR";
+    const FIELD_WRONG_FORMAT_ERROR = "FIELD_WRONG_FORMAT_ERROR";
+    const BLANK_TEMPLATE = "BLANK_TEMPLATE";
 
     /**
      * @var string[]
      */
     protected static $templates = [
         self::FIELD_MANDATORY_ERROR => "The field %s is mandatory",
-        self::FIELD_MANDATORY_ERROR => "%s has wrong format",
+        self::FIELD_WRONG_FORMAT_ERROR => "%s has wrong format",
+        self::BLANK_TEMPLATE => "%s",
     ];
 
     /**

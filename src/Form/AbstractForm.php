@@ -2,8 +2,15 @@
 
 namespace Sebk\SmallOrmForms\Form;
 
+use Sebk\SmallOrmCore\Dao\AbstractDao;
+use Sebk\SmallOrmCore\Dao\Model;
 use Sebk\SmallOrmForms\Message\Message;
 use Sebk\SmallOrmForms\Message\MessageCollection;
+use Sebk\SmallOrmForms\Type\BoolType;
+use Sebk\SmallOrmForms\Type\DateTimeType;
+use Sebk\SmallOrmForms\Type\FloatType;
+use Sebk\SmallOrmForms\Type\IntType;
+use Sebk\SmallOrmForms\Type\StringType;
 use Sebk\SmallOrmForms\Type\Type;
 use Sebk\SmallOrmForms\Type\TypeInterface;
 
@@ -15,18 +22,23 @@ abstract class AbstractForm
     /** @var Field[] */
     protected $fields;
 
+    /** @var bool */
+    protected $strict = false;
+
     /**
      * Add a new field
      * - default type is string
      * - default mandatory is Field default
-     * @param mixed $key
-     * @param TypeInterface $type
-     * @param mixed $value
+     * @param string $key
+     * @param string|null $label
+     * @param mixed|null $value
+     * @param string|null $typeString
      * @param string|null $mandatory
      * @return $this
      * @throws FieldException
+     * @throws \Sebk\SmallOrmForms\Type\TypeNotFoundException
      */
-    public function addField($key, $label = null, $value = null, string $typeString = null, string $mandatory = null)
+    public function addField(string $key, string $label = null, $value = null, string $typeString = null, string $mandatory = null)
     {
         // string by default
         $type = Type::get($typeString);
@@ -47,13 +59,108 @@ abstract class AbstractForm
      * @return mixed
      * @throws FieldNotFoundException
      */
-    public function getValue($key)
+    public function getValue(string $key)
     {
         if (!isset($this->fields[$key])) {
             throw new FieldNotFoundException("Field not found ($key)");
         }
 
         return $this->fields[$key]->getValue();
+    }
+
+    /**
+     * Set a field value
+     * @param string $key
+     * @param $value
+     * @return $this
+     * @throws FieldException
+     * @throws FieldNotFoundException
+     */
+    public function setValue(string $key, $value)
+    {
+        if (!isset($this->fields[$key])) {
+            throw new FieldNotFoundException("Field not found ($key)");
+        }
+
+        $this->fields[$key]->setValue($value);
+
+        return $this;
+    }
+
+    /**
+     * Return the field orresponding to the key
+     * @param $key
+     * @return Field
+     */
+    public function getField($key)
+    {
+        return $this->fields[$key];
+    }
+
+    /**
+     * Set form as strict or not
+     * @param bool $strict
+     * @return $this
+     */
+    public function setStrict(bool $strict = true)
+    {
+        $this->strict = $strict;
+
+        return $this;
+    }
+
+    /**
+     * Fill form values from array
+     * @param array $array
+     * @return $this
+     * @throws FieldException
+     * @throws FieldNotFoundException
+     */
+    public function fillFromArray(array $array)
+    {
+        foreach ($array as $key => $value) {
+            if ($this->strict && !isset($this->fields[$key])) {
+                throw new \Exception("Field $key does not exists !");
+            }
+
+            if (!isset($this->fields[$key])) {
+                break;
+            }
+
+            $this->setValue($key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Fill form values from stdClass
+     * @param \stdClass $stdClass
+     * @return $this
+     * @throws FieldException
+     * @throws FieldNotFoundException
+     */
+    public function fillFormStdClass(\stdClass $stdClass)
+    {
+        $array = json_decode(json_encode($stdClass), true);
+
+        $this->fillFromArray($array);
+
+        return $this;
+    }
+
+    /**
+     * Set field if mandatory or not
+     * @param string $key
+     * @param string $mandatory
+     * @return $this
+     * @throws \Exception
+     */
+    public function setFieldMandatory(string $key, string $mandatory = Field::MANDATORY)
+    {
+        $this->fields[$key]->setMandatory($mandatory);
+
+        return $this;
     }
 
     /**
@@ -66,11 +173,7 @@ abstract class AbstractForm
         if (!class_exists($messageClass)) {
             throw new \Exception("Message class $messageClass doesn't exists");
         }
-
-        if (!($$messageClass::class instanceof Message)) {
-            throw new \Exception("Message class $messageClass doesn't implement message");
-        }
-
+        
         $this->messageClass = $messageClass;
     }
 
@@ -92,7 +195,7 @@ abstract class AbstractForm
 
             // check value compliant to field type
             if (!$field->checkFormat()) {
-                $messages[] = new $messageClass(Message::FIELD_MANDATORY_ERROR, [$field->getLabel()]);
+                $messages[] = new $messageClass(Message::FIELD_WRONG_FORMAT_ERROR, [$field->getLabel()]);
                 $fail = true;
             }
         }

@@ -45,6 +45,15 @@ class Field
     }
 
     /**
+     * Force the type of the field
+     * @param TypeInterface $type
+     */
+    public function forceType(TypeInterface $type)
+    {
+        $this->type = $type;
+    }
+
+    /**
      * Set value
      * @param $value
      * @return $this
@@ -52,11 +61,7 @@ class Field
      */
     public function setValue($value)
     {
-        if (!$this->type->validate($value)) {
-            throw new FieldException("Field value must be of type " . $this->type->getType());
-        }
-
-        $this->value = $this->type->reformat($value);
+        $this->value = $value;
 
         return $this;
     }
@@ -77,6 +82,20 @@ class Field
     public function getMandatory()
     {
         return $this->mandatory;
+    }
+
+    /**
+     * Set mandatory
+     * @param $mandatory
+     * @throws \Exception
+     */
+    public function setMandatory($mandatory = self::MANDATORY)
+    {
+        if (!in_array($mandatory, [self::MANDATORY, self::OPTIONNAL])) {
+            throw new \Exception("Mandatory value ($mandatory) is not managed !");
+        }
+
+        $this->mandatory = $mandatory;
     }
 
     /**
