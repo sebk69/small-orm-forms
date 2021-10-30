@@ -129,7 +129,7 @@ class FormModel extends AbstractForm
 
         // Fill model fields with form fields
         foreach ($this->fields as $key => $field) {
-            $method = "raw" . $key;
+            $method = "set" . $key;
             $model->$method($field->getValue());
         }
 
@@ -186,6 +186,7 @@ class FormModel extends AbstractForm
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_INT:
                 return IntType::TYPE_INT;
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_DATETIME:
+            case \Sebk\SmallOrmCore\Dao\Field::TYPE_TIMESTAMP:
                 return DateTimeType::TYPE_DATE_TIME;
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_STRING:
                 return StringType::TYPE_STRING;

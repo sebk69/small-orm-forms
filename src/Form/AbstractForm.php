@@ -123,11 +123,9 @@ abstract class AbstractForm
                 throw new \Exception("Field $key does not exists !");
             }
 
-            if (!isset($this->fields[$key])) {
-                break;
+            if (isset($this->fields[$key])) {
+                $this->setValue($key, $value);
             }
-
-            $this->setValue($key, $value);
         }
 
         return $this;
@@ -202,4 +200,19 @@ abstract class AbstractForm
 
         return $messages;
     }
+
+    /**
+     * Set the type of a field
+     * @param string $key
+     * @param string $type
+     * @return $this
+     * @throws \Sebk\SmallOrmForms\Type\TypeNotFoundException
+     */
+    public function setFieldType(string $key, string $type)
+    {
+        $this->fields[$key]->setType(Type::get($type));
+
+        return $this;
+    }
+
 }

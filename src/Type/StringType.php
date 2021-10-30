@@ -26,11 +26,11 @@ class StringType implements TypeInterface
     /**
      * Reformat a value
      * @param $value
-     * @return int
+     * @return string
      */
     public function reformat($value)
     {
-        return (string)$value;
+        return $value;
     }
 
 }

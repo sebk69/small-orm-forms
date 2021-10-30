@@ -30,10 +30,16 @@ class DateTimeType implements TypeInterface
     /**
      * Reformat a value
      * @param $value
-     * @return int
+     * @return \DateTime|null
      */
     public function reformat($value)
     {
+        if (!$value instanceof \DateTime && !empty($value)) {
+            $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value);
+        } elseif (empty($value)) {
+            return null;
+        }
+
         return $value;
     }
 }

@@ -61,7 +61,7 @@ class Field
      */
     public function setValue($value)
     {
-        $this->value = $value;
+        $this->value = $this->type->reformat($value);
 
         return $this;
     }
@@ -72,7 +72,7 @@ class Field
      */
     public function getValue()
     {
-        return $this->value;
+        return $this->type->reformat($this->value);
     }
 
     /**
@@ -127,5 +127,25 @@ class Field
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * Get type
+     * @return TypeInterface
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set type of field
+     * @param TypeInterface $type
+     */
+    public function setType(TypeInterface $type)
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }
