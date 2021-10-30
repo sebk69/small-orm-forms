@@ -21,7 +21,6 @@ class IntType implements TypeInterface
     public function validate($value)
     {
         if (!ctype_digit((string)$value) && $value !== null) {
-            dump($value);
             return false;
         }
 
