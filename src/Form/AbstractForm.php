@@ -32,17 +32,14 @@ abstract class AbstractForm
      * @param string $key
      * @param string|null $label
      * @param mixed|null $value
-     * @param string|null $typeString
+     * @param TypeInterface $type
      * @param string|null $mandatory
      * @return $this
      * @throws FieldException
      * @throws \Sebk\SmallOrmForms\Type\TypeNotFoundException
      */
-    public function addField(string $key, string $label = null, $value = null, string $typeString = null, string $mandatory = null)
+    public function addField(string $key, string $label = null, $value = null, TypeInterface $type = null, string $mandatory = null)
     {
-        // string by default
-        $type = Type::get($typeString);
-
         // Add field
         if ($mandatory === null) {
             $this->fields[$key] = new Field($type, $label ?? $key, $value);

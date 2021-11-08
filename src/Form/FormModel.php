@@ -12,6 +12,7 @@ use Sebk\SmallOrmForms\Type\BoolType;
 use Sebk\SmallOrmForms\Type\DateTimeType;
 use Sebk\SmallOrmForms\Type\FloatType;
 use Sebk\SmallOrmForms\Type\IntType;
+use Sebk\SmallOrmForms\Type\PhpFilterType;
 use Sebk\SmallOrmForms\Type\StringType;
 
 class FormModel extends AbstractForm
@@ -180,16 +181,18 @@ class FormModel extends AbstractForm
     {
         switch ($daoField->getType()) {
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_BOOLEAN:
-                return BoolType::TYPE_BOOL;
+                return new BoolType();
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_FLOAT:
-                return FloatType::TYPE_FLOAT;
+                return new FloatType();
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_INT:
-                return IntType::TYPE_INT;
+                return new IntType();
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_DATETIME:
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_TIMESTAMP:
-                return DateTimeType::TYPE_DATE_TIME;
+                return (new DateTimeType())->setFormat($daoField->getFormat());
+            case \Sebk\SmallOrmCore\Dao\Field::TYPE_PHP_FILTER:
+                return (new PhpFilterType())->setFormat($daoField->getFormat());
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_STRING:
-                return StringType::TYPE_STRING;
+                return new StringType();
         }
 
         throw new \Exception("Type of DAO field unknown (" . $daoField->getType() . ")");

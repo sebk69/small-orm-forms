@@ -2,15 +2,16 @@
 
 namespace Sebk\SmallOrmForms\Type;
 
-class StringType implements TypeInterface
+class PhpFilterType implements TypeInterface
 {
-    const TYPE_STRING = "string";
+    const TYPE_PHP_FILTER = "phpFilter";
 
     use TypeTrait;
+    use FormatTrait;
 
     public function __construct()
     {
-        $this->setType(self::TYPE_STRING);
+        $this->setType(self::TYPE_PHP_FILTER);
     }
 
     /**
@@ -20,7 +21,7 @@ class StringType implements TypeInterface
      */
     public function validate($value)
     {
-        return true;
+        return filter_var($value, $this->getFormat());
     }
 
     /**

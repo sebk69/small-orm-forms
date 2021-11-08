@@ -141,6 +141,7 @@ class Field
     /**
      * Set type of field
      * @param TypeInterface $type
+     * @return $this
      */
     public function setType(TypeInterface $type)
     {

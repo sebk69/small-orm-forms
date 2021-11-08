@@ -7,10 +7,12 @@ class DateTimeType implements TypeInterface
     const TYPE_DATE_TIME = "datetime";
 
     use TypeTrait;
+    use FormatTrait;
 
-    public function __contruct()
+    public function __construct()
     {
         $this->setType(self::TYPE_DATE_TIME);
+        $this->setFormat("Y-m-d H:i:s");
     }
 
     /**
@@ -35,7 +37,7 @@ class DateTimeType implements TypeInterface
     public function reformat($value)
     {
         if (!$value instanceof \DateTime && !empty($value)) {
-            $value = \DateTime::createFromFormat("Y-m-d H:i:s", $value);
+            $value = \DateTime::createFromFormat($this->getFormat(), $value);
         } elseif (empty($value)) {
             return null;
         }
