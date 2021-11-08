@@ -17,4 +17,4 @@ composer require sebk/small-orm-forms
 
 ## Documentation
 
-You can find the [documentation](https://github.com/sebk69/small-orm-doc)
+You can find the documentation here : [documentation](https://github.com/sebk69/small-orm-doc)
