@@ -135,7 +135,7 @@ abstract class AbstractForm
      * @throws FieldException
      * @throws FieldNotFoundException
      */
-    public function fillFormStdClass(\stdClass $stdClass)
+    public function fillFromStdClass(\stdClass $stdClass)
     {
         $array = json_decode(json_encode($stdClass), true);
 

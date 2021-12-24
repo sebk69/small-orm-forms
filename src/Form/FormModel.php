@@ -10,8 +10,10 @@ use Sebk\SmallOrmCore\Dao\ToOneRelation;
 use Sebk\SmallOrmCore\Factory\DaoNotFoundException;
 use Sebk\SmallOrmForms\Type\BoolType;
 use Sebk\SmallOrmForms\Type\DateTimeType;
+use Sebk\SmallOrmForms\Type\DateType;
 use Sebk\SmallOrmForms\Type\FloatType;
 use Sebk\SmallOrmForms\Type\IntType;
+use Sebk\SmallOrmForms\Type\JsonType;
 use Sebk\SmallOrmForms\Type\PhpFilterType;
 use Sebk\SmallOrmForms\Type\StringType;
 
@@ -186,6 +188,10 @@ class FormModel extends AbstractForm
                 return new FloatType();
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_INT:
                 return new IntType();
+            case \Sebk\SmallOrmCore\Dao\Field::TYPE_JSON:
+                return new JsonType();
+            case \Sebk\SmallOrmCore\Dao\Field::TYPE_DATE:
+                return new DateType();
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_DATETIME:
             case \Sebk\SmallOrmCore\Dao\Field::TYPE_TIMESTAMP:
                 return (new DateTimeType())->setFormat($daoField->getFormat());
