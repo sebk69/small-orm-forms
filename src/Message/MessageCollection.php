@@ -44,4 +44,15 @@ class MessageCollection extends AbstractCollection implements \JsonSerializable
 
         return $messagesArray;
     }
+
+    public function __toString()
+    {
+        $messages = "";
+        /** @var Message $message */
+        foreach ($this->array as $message) {
+            $messages .= $message->get();
+        }
+
+        return $messages;
+    }
 }
