@@ -21,7 +21,7 @@ class PhpFilterType implements TypeInterface
      */
     public function validate($value)
     {
-        return filter_var($value, $this->getFormat());
+        return filter_var($value, $this->getFormat()) !== false;
     }
 
     /**

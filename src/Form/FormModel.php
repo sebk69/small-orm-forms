@@ -86,7 +86,7 @@ class FormModel extends AbstractForm
         }
 
         // Convert to array
-        $array = $model->toArray(false, true);
+        $array = $model->toArray(false, true, true);
 
         // And fill
         $this->fillFromArray($array);

@@ -20,7 +20,7 @@ class FloatType implements TypeInterface
      */
     public function validate($value)
     {
-        if (!filter_var($value, FILTER_VALIDATE_FLOAT)) {
+        if (!filter_var($value, FILTER_VALIDATE_FLOAT) && $value != null) {
             return false;
         }
 

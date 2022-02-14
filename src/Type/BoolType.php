@@ -20,7 +20,7 @@ class BoolType implements TypeInterface
      */
     public function validate($value)
     {
-        if (!is_bool($value)) {
+        if (!is_bool($value) && $value != null) {
             return false;
         }
 

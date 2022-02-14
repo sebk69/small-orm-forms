@@ -7,7 +7,7 @@ use Sebk\SmallOrmForms\Type\TypeInterface;
 class Field
 {
     const MANDATORY = "mandatory";
-    const OPTIONNAL = "optionnal";
+    const OPTIONAL = "optional";
 
     /** @var TypeInterface */
     protected $type;
@@ -26,10 +26,10 @@ class Field
      * @param string $mandatory
      * @throws FieldException
      */
-    public function __construct(TypeInterface $type, string $label, $value, string $mandatory = self::OPTIONNAL)
+    public function __construct(TypeInterface $type, string $label, $value, string $mandatory = self::OPTIONAL)
     {
         // is mandatory ?
-        if (!in_array($mandatory, [self::MANDATORY, self::OPTIONNAL])) {
+        if (!in_array($mandatory, [self::MANDATORY, self::OPTIONAL])) {
             throw new FieldException("Wrong mandatory value");
         }
         $this->mandatory = $mandatory;
@@ -91,7 +91,7 @@ class Field
      */
     public function setMandatory($mandatory = self::MANDATORY)
     {
-        if (!in_array($mandatory, [self::MANDATORY, self::OPTIONNAL])) {
+        if (!in_array($mandatory, [self::MANDATORY, self::OPTIONAL])) {
             throw new \Exception("Mandatory value ($mandatory) is not managed !");
         }
 
