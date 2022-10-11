@@ -159,7 +159,7 @@ class FormModel extends AbstractForm
 
         // Validate model with model validator
         try {
-            if (!$this->model->getValidator()->validate()) {
+            if ($this->model->getValidator() && !$this->model->getValidator()->validate()) {
                 $messages->merge($this->model->getValidator()->getMessage());
             }
         } catch (DaoNotFoundException $e) {}
