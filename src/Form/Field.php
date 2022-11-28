@@ -2,6 +2,8 @@
 
 namespace Sebk\SmallOrmForms\Form;
 
+use Sebk\SmallOrmForms\Type\ArrayType;
+use Sebk\SmallOrmForms\Type\SubFormType;
 use Sebk\SmallOrmForms\Type\TypeInterface;
 
 class Field
@@ -104,7 +106,7 @@ class Field
      */
     public function checkMandatory()
     {
-        if ($this->getMandatory() == self::MANDATORY && empty($this->getValue())) {
+        if ($this->getMandatory() == self::MANDATORY && empty($this->getValue()) && $this->getValue() !== 0) {
             return false;
         }
 

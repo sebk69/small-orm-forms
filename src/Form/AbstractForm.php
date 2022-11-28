@@ -6,6 +6,7 @@ use Sebk\SmallOrmCore\Dao\AbstractDao;
 use Sebk\SmallOrmCore\Dao\Model;
 use Sebk\SmallOrmForms\Message\Message;
 use Sebk\SmallOrmForms\Message\MessageCollection;
+use Sebk\SmallOrmForms\Type\ArrayType;
 use Sebk\SmallOrmForms\Type\BoolType;
 use Sebk\SmallOrmForms\Type\DateTimeType;
 use Sebk\SmallOrmForms\Type\FloatType;
@@ -185,13 +186,30 @@ abstract class AbstractForm
             // Check field is mandatory
             if (!$field->checkMandatory()) {
                 $messages[] = new $messageClass(Message::FIELD_MANDATORY_ERROR, [$field->getLabel()]);
-                $fail = true;
             }
 
             // check value compliant to field type
             if (!$field->checkFormat()) {
                 $messages[] = new $messageClass(Message::FIELD_WRONG_FORMAT_ERROR, [$field->getLabel()]);
-                $fail = true;
+            }
+
+            // If field is array, call validate of subforms
+            if ($field->getType()->getType() == ArrayType::TYPE_ARRAY) {
+                foreach ($field->getValue() as $subfield) {
+                    if ($subfield instanceof AbstractForm) {
+                        $messages->merge($subfield->validate());
+                    } else {
+                        // Check field is mandatory
+                        if (!$field->checkMandatory()) {
+                            $messages[] = new $messageClass(Message::FIELD_MANDATORY_ERROR, [$subfield->getLabel()]);
+                        }
+
+                        // check value compliant to field type
+                        if (!$field->checkFormat()) {
+                            $messages[] = new $messageClass(Message::FIELD_WRONG_FORMAT_ERROR, [$subfield->getLabel()]);
+                        }
+                    }
+                }
             }
         }
 

@@ -34,6 +34,10 @@ class IntType implements TypeInterface
      */
     public function reformat($value)
     {
+        if ($value === null) {
+            return $value;
+        }
+
         return (int)$value;
     }
 }

@@ -8,7 +8,7 @@ class FloatType implements TypeInterface
 
     use TypeTrait;
 
-    public function __contruct()
+    public function __construct()
     {
         $this->setType(self::TYPE_FLOAT);
     }
@@ -34,6 +34,10 @@ class FloatType implements TypeInterface
      */
     public function reformat($value)
     {
+        if ($value === null) {
+            return $value;
+        }
+
         return (float)$value;
     }
 }
