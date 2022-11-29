@@ -2,6 +2,8 @@
 
 namespace Sebk\SmallOrmForms\Type;
 
+use Sebk\SmallOrmForms\Form\Field;
+
 class ArrayType implements TypeInterface
 {
     const TYPE_ARRAY = "array";
@@ -11,6 +13,11 @@ class ArrayType implements TypeInterface
     public function __construct(protected TypeInterface $subtype)
     {
         $this->setType(self::TYPE_ARRAY);
+    }
+    
+    public function getSubtype(): TypeInterface
+    {
+        return $this->subtype;
     }
 
     /**
@@ -24,9 +31,9 @@ class ArrayType implements TypeInterface
         if (!is_array($value)) {
             return false;
         }
-        
+
         foreach ($value as $item) {
-            if (!$item->validate()) {
+            if (!$this->subtype->validate($item->getValue())) {
                 return false;
             }
         }
@@ -41,11 +48,18 @@ class ArrayType implements TypeInterface
      */
     public function reformat($value)
     {
-        $result = [];
+        if ($value === null) {
+            return null;
+        }
+
+        /**
+         * @var int $key
+         * @var Field $item
+         */
         foreach ($value as $key => $item) {
-            $result[$key] = $this->subtype->reformat($item);
+            $item->setValue($this->subtype->reformat($item->getValue()));
         }
         
-        return $result;
+        return $value;
     }
 }

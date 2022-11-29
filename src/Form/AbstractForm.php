@@ -41,11 +41,30 @@ abstract class AbstractForm
      */
     public function addField(string $key, string $label = null, $value = null, TypeInterface $type = null, string $mandatory = null)
     {
-        // Add field
-        if ($mandatory === null) {
-            $this->fields[$key] = new Field($type, $label ?? $key, $value);
+        if (!($type instanceof ArrayType)) {
+            // Add field
+            if ($mandatory === null) {
+                $this->fields[$key] = new Field($type, $label ?? $key, $value);
+            } else {
+                $this->fields[$key] = new Field($type, $label ?? $key, $value, $mandatory);
+            }
         } else {
-            $this->fields[$key] = new Field($type, $label ?? $key, $value, $mandatory);
+            if (!is_array($value) && $value !== null) {
+                throw new \Exception('Array wrong value. Value must be of type array or null');
+            }
+
+            // Add subvalues
+            if ($value !== null) {
+                foreach ($value as $i => $item) {
+                    $fields[] = new Field($type->getSubtype(), $i, $item);
+                }
+
+                if ($mandatory === null) {
+                    $this->fields[$key] = new Field($type, $label ?? $key, $fields);
+                } else {
+                    $this->fields[$key] = new Field($type, $label ?? $key, $fields, $mandatory);
+                }
+            }
         }
 
         return $this;
@@ -186,6 +205,7 @@ abstract class AbstractForm
             // Check field is mandatory
             if (!$field->checkMandatory()) {
                 $messages[] = new $messageClass(Message::FIELD_MANDATORY_ERROR, [$field->getLabel()]);
+                return $messages;
             }
 
             // check value compliant to field type
